@@ -5,37 +5,49 @@ const scores = document.getElementById("scores");
 
 // Save score to Local Storage
 function saveScore() {
-	let obj = {}; 
-	
-	obj["name"] = nameInput.value; 
-	obj["score"] = scoreInput.value;
-	localStorage.setItem("scores",JSON.stringify(obj));
+  let arr = JSON.parse(localStorage.getItem("scores")) || [];  
+
+  arr.push({ 
+    name: nameInput.value,
+    score: scoreInput.value,
+  });
+
+  localStorage.setItem("scores", JSON.stringify(arr));
   showScores();
 }
 
 // Show scores in div
 function showScores() {
-	scores.innerText = "";
-  let table = document.createElement('table');
-	let th1 = document.createElement('th');
-	th1.innerText = 'Name';
-	let th2 = document.createElement('th');
-	th2.innerText = 'Score';
-	
-	let tr = document.createElement('tr');
-	tr.append(th1,th2);
-	table.append(tr);
+  let scoresarr = JSON.parse(localStorage.getItem("scores"));
+  scores.innerText = "";
 
-	let score = JSON.parse(localStorage.getItem('scores'))
-	
-	if(score){
-		let td1 = document.createElement('td');
-		td1.innerText = score.name;
-		let td2 = document.createElement('td');
-		td2.innerText = score.score;
-		let tr = document.createElement('tr');
-		tr.append(td1,td2);
-		table.append(tr);
-	}
-	scores.append(table);
+  if (!scoresarr || scoresarr.length === 0) {
+    scores.innerText = "No scores yet";
+    return;
+  }
+  
+  let table = document.createElement('table');
+  let th1 = document.createElement('th');
+  th1.innerText = 'Name';
+  let th2 = document.createElement('th');
+  th2.innerText = 'Score';
+  
+  let tr = document.createElement('tr');
+  tr.append(th1, th2);
+  table.append(tr);
+  
+  for (let i = scoresarr.length - 1; i >= 0; i--) {
+    let tr = document.createElement("tr");
+
+    let td1 = document.createElement("td");
+    td1.innerText = scoresarr[i].name;
+
+    let td2 = document.createElement("td");
+    td2.innerText = scoresarr[i].score;
+
+    tr.append(td1, td2);
+    table.append(tr);
+  }
+
+  scores.append(table);
 }
