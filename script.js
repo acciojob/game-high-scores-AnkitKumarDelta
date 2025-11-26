@@ -25,7 +25,9 @@ function showScores() {
     scores.innerText = "No scores yet";
     return;
   }
-  
+
+  scoresarr.sort((a, b) => b.score - a.score);
+	
   let table = document.createElement('table');
   let th1 = document.createElement('th');
   th1.innerText = 'Name';
